@@ -1,0 +1,22 @@
+.settings-panel {
+  position: absolute;
+  top: 55px;
+  right: 5%;
+  left: 5%;
+  width: 90%;
+  border-radius: 0px;
+  z-index: 2000;
+}
+.settings-panel-body {
+}
+.settings-close {
+  cursor: pointer;
+  text-decoration: none;
+  float: right;
+}
+
+.repo-list {
+  border-bottom: solid 1px #eee;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}

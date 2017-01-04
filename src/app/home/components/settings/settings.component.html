@@ -1,0 +1,46 @@
+<a class="btn pull-right" (click)="toggleSetting()">
+  <i class="fa fa-cogs"></i>&nbsp;
+  <i class="fa fa-caret-up" *ngIf="isOpen()"></i>
+  <i class="fa fa-caret-down" *ngIf="!isOpen()"></i>
+</a>
+<div class="panel panel-default settings-panel" *ngIf="isOpen()">
+  <div class="panel-heading">
+    <div class="row">
+      <div class="col-md-12">
+        <span><b>Settings</b></span>
+        <a (click)="toggleSetting()" class="settings-close"><i class="fa fa-times"></i></a>
+      </div>
+    </div>
+  </div>
+  <div class="panel-body settings-panel-body">
+    <div class="row">
+      <div class="col-md-12">
+        <h5 class="page-header" style="margin-top: 2px;">
+          <b style="font-size: 13px;">Available Repositories</b>
+          <button class="btn btn-primary btn-xs pull-right">Add New</button>
+        </h5>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <ul class="list-unstyled">
+          <li class="repo-list">
+            <input type="checkbox">
+            <span><a href="">Repository</a></span>
+            <a href="" class="pull-right"><i class="fa fa-times"></i></a>
+          </li>
+          <li class="repo-list">
+            <input type="checkbox">
+            <span><a href="">Repository</a></span>
+            <a href="" class="pull-right"><i class="fa fa-times"></i></a>
+          </li>
+          <li class="repo-list">
+            <input type="checkbox">
+            <span><a href="">Repository</a></span>
+            <a href="" class="pull-right"><i class="fa fa-times"></i></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
