@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'metadata-package',
+  selector: 'app-metadata-package',
   templateUrl: './metadata-package.component.html',
   styleUrls: ['./metadata-package.component.css']
 })

@@ -4,8 +4,8 @@ import {Observable} from 'rxjs';
 
 @Component({
   selector: 'ng2-dhis-menu',
-  templateUrl: './dhis2-menu.component.html',
-  styleUrls: ['./dhis2-menu.component.css']
+  templateUrl: 'dhis2-menu.component.html',
+  styleUrls: ['dhis2-menu.component.css']
 })
 export class Dhis2MenuComponent implements OnInit {
 

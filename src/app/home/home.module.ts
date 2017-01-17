@@ -4,17 +4,17 @@ import { FormsModule } from '@angular/forms';
 import {HomeRoutingModule} from "./home.routing.module";
 import {HomeComponent} from "./home.component";
 import { SettingsComponent } from './components/settings/settings.component';
-import { HeaderComponent } from './components/header/header.component';
 import { TipsComponent } from './components/tips/tips.component';
-import { MetadataPackageComponent } from './components/metadata-package/metadata-package.component';
+import {SharedModule} from "../shared/shared.module";
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    HomeRoutingModule
+    HomeRoutingModule,
+    SharedModule
   ],
-  declarations: [HomeComponent, SettingsComponent, HeaderComponent, TipsComponent, MetadataPackageComponent],
+  declarations: [HomeComponent, SettingsComponent, TipsComponent],
   exports: [],
   providers: []
 })

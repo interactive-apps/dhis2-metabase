@@ -1,0 +1,25 @@
+#home-header {
+  background-color: #f5f5f5;
+  padding-top: 20px;
+  border-bottom: solid 1px #eee;
+}
+
+.package-name {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.package-block {
+  position: relative;
+}
+
+.package-links {
+  position: absolute;
+  right: 5px;
+  top: 4px;
+  display: none;
+}
+
+.package-block:hover .package-links {
+  display: block;
+}

@@ -8,7 +8,7 @@ import {Ng2PaginationModule} from 'ng2-pagination';
 import { Ng2TableModule } from 'ng2-table/ng2-table';
 
 import { AppComponent } from './app.component';
-import {SharedModule} from "./shared/shared-module.module";
+import {SharedModule} from "./shared/shared.module";
 
 
 @NgModule({

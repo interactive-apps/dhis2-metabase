@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {MetadataPackage} from "../shared/models/metadata-package";
+import {MetadataPackageService} from "../shared/providers/metadata-package.service";
 
 @Component({
   selector: 'app-home',
@@ -7,9 +9,24 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  public metadataPackages: MetadataPackage[];
+  public loading: boolean;
+  public hasError: boolean;
+  constructor(
+    private metadataPackageService:  MetadataPackageService
+  ) {
+    this.loading = true;
+    this.hasError = false;
+  }
 
   ngOnInit() {
+    this.metadataPackageService.loadAll().subscribe(metadataPackages => {
+      this.metadataPackages = metadataPackages;
+      this.loading = false;
+    }, error => {
+      this.loading = false;
+      this.hasError = true;
+    })
   }
 
 }
