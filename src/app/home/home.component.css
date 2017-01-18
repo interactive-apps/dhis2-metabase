@@ -5,8 +5,8 @@
 }
 
 .package-name {
-  font-size: 20px;
-  font-weight: bold;
+  margin-top: 4px;
+  margin-bottom: 0px;
 }
 
 .package-block {

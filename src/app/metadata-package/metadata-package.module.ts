@@ -4,12 +4,14 @@ import { MetadataPackageComponent } from './metadata-package.component';
 import { ViewPackageComponent } from './pages/view-package/view-package.component';
 import {MetadataPackageRoutingModule} from "./metadata-package.routing";
 import {TabsModule} from "ng2-bootstrap";
+import {SharedModule} from "../shared/shared.module";
 
 @NgModule({
   imports: [
     CommonModule,
     MetadataPackageRoutingModule,
-    TabsModule
+    TabsModule,
+    SharedModule
   ],
   declarations: [MetadataPackageComponent, ViewPackageComponent]
 })

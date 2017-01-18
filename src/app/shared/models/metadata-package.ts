@@ -1,8 +1,9 @@
 export interface MetadataPackage {
   id: string;
   name: string;
+  url: string;
   description: string;
-  organisation: string;
+  organization: string;
   icons: Array<any>;
   license: any;
   tags: Array<any>;

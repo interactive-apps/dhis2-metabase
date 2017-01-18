@@ -80,4 +80,14 @@ export class MetadataPackageService {
       });
     });
   }
+
+  findLatestVersion(metadataPackage: MetadataPackage): number {
+    let versionArray = [];
+    metadataPackage.versions.forEach(version => {
+     versionArray.push(version.version);
+    });
+    versionArray = versionArray.sort((a, b) => a - b);
+    return versionArray[0];
+  }
+
 }

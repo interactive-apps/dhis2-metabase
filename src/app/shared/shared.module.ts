@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import {Dhis2MenuComponent} from "./components/dhis2-menu/dhis2-menu.component";
 import {MetadataPackageService} from "./providers/metadata-package.service";
 import {FilterPipe} from "./pipes/filter.pipe";
+import {MetadataService} from "./providers/metadata.service";
+import { ReadableNamePipe } from './pipes/readable-name.pipe';
 
 @NgModule({
   imports: [
@@ -10,14 +12,17 @@ import {FilterPipe} from "./pipes/filter.pipe";
   ],
   declarations: [
     Dhis2MenuComponent,
-    FilterPipe
+    FilterPipe,
+    ReadableNamePipe
   ],
   providers: [
-    MetadataPackageService
+    MetadataPackageService,
+    MetadataService
   ],
   exports: [
     Dhis2MenuComponent,
-    FilterPipe
+    FilterPipe,
+    ReadableNamePipe
   ]
 })
 export class SharedModule { }

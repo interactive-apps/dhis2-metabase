@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {MetadataPackageService} from "../../../shared/providers/metadata-package.service";
 import {MetadataPackage} from "../../../shared/models/metadata-package";
+import {MetadataService} from "../../../shared/providers/metadata.service";
+import {Metadata} from "../../../shared/models/metadata";
+import {mergeAll} from "rxjs/operator/mergeAll";
 
 @Component({
   selector: 'app-view-package',
@@ -10,15 +13,19 @@ import {MetadataPackage} from "../../../shared/models/metadata-package";
 })
 export class ViewPackageComponent implements OnInit {
 
-  public loading: boolean;
-  public hasError: boolean;
+  public loadingPackage: boolean;
+  public packageHasError: boolean;
+  public loadingMetadata: boolean;
+  public metadataHasError: boolean;
   public metadataPackage: MetadataPackage;
+  public metadata: any;
   constructor(
     private route: ActivatedRoute,
-    private metadataPackageService: MetadataPackageService
+    private metadataPackageService: MetadataPackageService,
+    private metadataService: MetadataService
   ) {
-    this.loading = true;
-    this.hasError = false;
+    this.loadingPackage = this.loadingMetadata = true;
+    this.packageHasError = this.metadataHasError = false;
   }
 
   ngOnInit() {
@@ -26,12 +33,24 @@ export class ViewPackageComponent implements OnInit {
       let packageId = params['id'];
       this.metadataPackageService.find(packageId).subscribe(metadataPackage => {
         this.metadataPackage = metadataPackage;
-        this.loading = false;
+        this.loadingPackage = false;
+        //load metadata
+        this.metadataService.findByPackage(metadataPackage, this.metadataPackageService.findLatestVersion(metadataPackage)).subscribe(metadata => {
+          this.metadata = metadata;
+          this.loadingMetadata = false;
+        }, error => {
+          this.loadingMetadata = false;
+          this.metadataHasError = true;
+        })
       }, error => {
-        this.loading = false;
-        this.hasError = true;
+        this.loadingPackage = false;
+        this.packageHasError = true;
       })
     })
+  }
+
+  importMetadata(dryRun, metadata) {
+    this.metadataService.importMetadata(dryRun, metadata);
   }
 
 }
