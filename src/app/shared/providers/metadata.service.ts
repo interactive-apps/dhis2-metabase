@@ -96,9 +96,8 @@ export class MetadataService {
       };
   }
 
-  importMetadata(dryRun: boolean, metadata) {
-
-    this.http.post('/api/metadata?dryRun='+ dryRun + '&strategy=CREATE_AND_UPDATE', metadata)
+  importMetadata(dryRun: boolean, metadata: any) {
+    this.http.post('../../../api/metadata?dryRun='+ dryRun + '&strategy=CREATE_AND_UPDATE', metadata)
       .map(res => res.json())
       .subscribe(importResult => {
         console.log(this.compileImportSummary(importResult))

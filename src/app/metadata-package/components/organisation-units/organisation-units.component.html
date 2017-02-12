@@ -1,0 +1,46 @@
+<!--<button class="btn btn-default pull-right">Import Organisation Units</button>-->
+<table class="table table-bordered">
+  <thead>
+  <tr>
+    <th>#</th>
+    <th>Name</th>
+    <th>Code</th>
+    <th>Parent</th>
+    <th>Status</th>
+    <th>Action</th>
+  </tr>
+  </thead>
+  <tbody *ngFor="let orgUnit of scannedOrgUnits;let i=index">
+  <tr (click)="toggle(orgUnit.id)" style="cursor: pointer;">
+    <td>{{i + 1}}</td>
+    <td>{{orgUnit.name}}</td>
+    <td>{{orgUnit.code}}</td>
+    <td>
+      <span class="notification-box-danger" *ngIf="!orgUnit.parentAvailable">Parent not Available</span>
+      <span *ngIf="orgUnit.parentAvailable">{{orgUnit.parent.name}}</span>
+    </td>
+    <td>
+      <span class="notification-box-success" *ngIf="orgUnit.available">
+        <i class="fa fa-check"></i>&nbsp;
+        Imported
+      </span>
+      <span *ngIf="!orgUnit.available">Not imported</span>
+    </td>
+    <td>
+      <a class="btn btn-info btn-xs">view</a>
+      <!--<a href="" class="btn btn-warning btn-xs" *ngIf="!orgUnit.parentAvailable">fix</a>-->
+    </td>
+  </tr>
+  <tr *ngIf="currentSelected == orgUnit.id" style="border-bottom-style: none; ">
+    <td colspan="6">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="jumbotron">
+            <h2>Hello, its working.</h2>
+          </div>
+        </div>
+      </div>
+    </td>
+  </tr>
+  </tbody>
+</table>

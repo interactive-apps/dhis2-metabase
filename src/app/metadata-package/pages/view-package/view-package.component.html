@@ -77,27 +77,33 @@
       </div>
       <div class="col-md-9 col-sm-8">
         <div class="panel panel-default">
-          <div class="row">
-            <div class="col-md-12" style="padding: 10px 30px 10px 30px; margin-bottom: 10px;">
-              <h5><b>Description</b></h5>
-              <p class="text-justify">{{metadataPackage.description}}</p>
-              <a (click)="importMetadata(true, metadata.metadata)" class="btn btn-sm btn-default">Preview Import</a>
-              <a (click)="importMetadata(false, metadata.metadata)" class="btn btn-sm btn-info">Import</a>
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-md-12" style="margin-bottom: 10px;">
+                <h5><b>Description</b></h5>
+                <p class="text-justify">{{metadataPackage.description}}</p>
+                <a (click)="importMetadata(true, metadata.metadata)" class="btn btn-sm btn-default">Preview Import</a>
+                <a (click)="importMetadata(false, META)" class="btn btn-sm btn-info">Import</a>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <small *ngIf="loadingMetadata && !metadataHasError">Loading metadata details, please wait...</small>
+                <tabset *ngIf="!loadingMetadata && !metadataHasError">
+                  <tab *ngFor="let item of metadata.items">
+                    <template tabHeading>
+                      {{item | readableName}}
+                    </template>
+                    <div class="row">
+                      <div class="col-md-12" style="padding-top: 10px;">
+                        <app-organisation-units [orgUnits]="metadata.metadata[item]" *ngIf="item == 'organisationUnits'"></app-organisation-units>
+                      </div>
+                    </div>
+                  </tab>
+                </tabset>
+              </div>
             </div>
           </div>
-          <small *ngIf="loadingMetadata && !metadataHasError">Loading metadata details, please wait...</small>
-          <tabset *ngIf="!loadingMetadata && !metadataHasError">
-            <tab *ngFor="let item of metadata.items">
-              <template tabHeading>
-                {{item | readableName}}
-              </template>
-              <div class="row">
-                <div class="col-md-12" style="padding: 10px 30px 10px 30px;">
-                  {{metadata.metadata[item] | json}}
-                </div>
-              </div>
-            </tab>
-          </tabset>
         </div>
       </div>
     </div>
