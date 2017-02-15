@@ -5,10 +5,12 @@ import {MetadataPackageService} from "./providers/metadata-package.service";
 import {FilterPipe} from "./pipes/filter.pipe";
 import {MetadataService} from "./providers/metadata.service";
 import { ReadableNamePipe } from './pipes/readable-name.pipe';
+import {MomentModule} from "angular2-moment";
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    MomentModule
   ],
   declarations: [
     Dhis2MenuComponent,
@@ -22,7 +24,8 @@ import { ReadableNamePipe } from './pipes/readable-name.pipe';
   exports: [
     Dhis2MenuComponent,
     FilterPipe,
-    ReadableNamePipe
+    ReadableNamePipe,
+    MomentModule
   ]
 })
 export class SharedModule { }

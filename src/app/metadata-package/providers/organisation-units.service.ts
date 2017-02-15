@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {Observable} from "rxjs";
 import {Http, Response} from "@angular/http";
+import {scan} from "rxjs/operator/scan";
 
 @Injectable()
 export class OrganisationUnitsService {
@@ -17,18 +18,29 @@ export class OrganisationUnitsService {
         observer.complete();
       } else {
         orgUnits.forEach(orgUnit  => {
-          //show if it exist in the system
-          orgUnit.available = this.exitInTheSystem(orgUnit.id) ? true : false;
+          let scanResult =  {};
+          let conflicts = [];
+          //Check if orgunit exist in the system
+          this.findFromSystem(orgUnit.id)
+            .subscribe(
+              found => {
+                scanResult['exist'] = true;
+              }, notFound => {
+                scanResult['exist'] = false;
+              })
+
           //show if it has parent
           if(orgUnit.hasOwnProperty('parent')) {
-            if(this.isParentAvailable(orgUnits,orgUnit.parent.id, 'array')) {
-              orgUnit.parentAvailable = true;
-            } else if(this.isParentAvailable(orgUnits,orgUnit.parent.id, 'system')){
-              orgUnit.parentAvailable = true
-            } else {
-              orgUnit.parentAvailable = false;
+            scanResult['parentAvailable'] = true;
+            if(!this.isParentAvailable(orgUnits,orgUnit.parent.id)) {
+              conflicts.push('No parent object')
             }
+          } else {
+            scanResult['parentAvailable'] = false;
+            conflicts.push('Parent not found')
           }
+          scanResult['conflicts'] = conflicts;
+          orgUnit.scanResult = scanResult;
         });
         this.organisationUnitPool = orgUnits;
         observer.next(this.organisationUnitPool);
@@ -37,33 +49,23 @@ export class OrganisationUnitsService {
     });
   }
 
-  exitInTheSystem(orgunitId): Observable<boolean> {
-    return Observable.create(observer => {
-      this.http.get('../../../api/organisationUnits/' + orgunitId + '.json?fields=id')
-        .map((res: Response) => res.json())
-        .subscribe(
-          orgUnit => {
-          observer.next(true);
-          observer.complete()
-          },
-          error => {
-            observer.next(false);
-          });
-    })
+  findFromSystem(orgunitId): Observable<any> {
+    return this.http.get('../../../api/organisationUnits/' + orgunitId + '.json?fields=id')
+      .map((res: Response) => res.json())
   }
 
-  isParentAvailable(orgUnitArray, parentId, source): boolean {
+  isParentAvailable(orgUnitArray, parentId): boolean {
     let found: boolean = false;
-    if(source == 'array') {
-      for (let orgUnit of orgUnitArray) {
-        if(orgUnit.id == parentId) {
-          found = true;
-          break;
-        }
+    for (let orgUnit of orgUnitArray) {
+      if(orgUnit.id == parentId) {
+        found = true;
+        break;
       }
-    } else {
-      this.exitInTheSystem(parentId).subscribe(exist => {
-        found = exist;
+    }
+
+    if(!found) {
+      this.findFromSystem(parentId).subscribe(exist => {
+        found = true;
       });
     }
     return found;

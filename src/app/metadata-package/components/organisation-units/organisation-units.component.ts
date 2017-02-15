@@ -17,6 +17,7 @@ export class OrganisationUnitsComponent implements OnInit {
   ngOnInit() {
     this.orgUnitService.getScannedOrgUnits(this.orgUnits)
       .subscribe(scannedOrgunits => {
+        console.log(scannedOrgunits)
         this.scannedOrgUnits = scannedOrgunits;
       })
   }
