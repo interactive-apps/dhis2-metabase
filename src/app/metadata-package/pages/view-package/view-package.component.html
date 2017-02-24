@@ -20,11 +20,8 @@
         </ol>
       </div>
     </div>
-    <div class="row" *ngIf="loadingPackage && !packageHasError">
-      <div class="col-md-12"><small>Loading metadata package....</small></div>
-    </div>
-    <div class="row" *ngIf="!loadingPackage && !packageHasError">
-      <div class="col-md-3 col-sm-4">
+    <div class="row">
+      <div class="col-md-3 col-sm-4" *ngIf="!loadingPackage && !packageHasError">
         <div class="panel panel-default">
           <div class="panel-body">
             <table class="table package-table">
@@ -62,45 +59,33 @@
                 </td>
               </tr>
             </table>
-            <small *ngIf="loadingMetadata && !metadataHasError">Loading metadata summary, please wait...</small>
-            <table class="table package-table" *ngIf="!loadingMetadata && !metadataHasError">
-              <tr>
-                <th colspan="2"><h5 style="margin-top: 0px;"><b>Metadata Information</b></h5></th>
-              </tr>
-              <tr *ngFor="let item of metadata.items;">
-                <th><small>{{item | readableName}}</small></th>
-                <td><span class="notification-box-success">{{metadata.count[item]}}</span></td>
-              </tr>
-            </table>
+            <!--<small *ngIf="loadingMetadata && !metadataHasError">Loading metadata summary, please wait...</small>-->
+            <!--<table class="table package-table" *ngIf="!loadingMetadata && !metadataHasError">-->
+              <!--<tr>-->
+                <!--<th colspan="2"><h5 style="margin-top: 0px;"><b>Metadata Information</b></h5></th>-->
+              <!--</tr>-->
+              <!--<tr *ngFor="let item of metadata.items;">-->
+                <!--<th><small>{{item | readableName}}</small></th>-->
+                <!--<td><span class="notification-box-success">{{metadata.count[item]}}</span></td>-->
+              <!--</tr>-->
+            <!--</table>-->
           </div>
         </div>
       </div>
       <div class="col-md-9 col-sm-8">
         <div class="panel panel-default">
           <div class="panel-body">
-            <div class="row">
+            <div class="row" *ngIf="!loadingPackage && !packageHasError">
               <div class="col-md-12" style="margin-bottom: 10px;">
                 <h5><b>Description</b></h5>
                 <p class="text-justify">{{metadataPackage.description}}</p>
                 <a (click)="importMetadata(true, metadata.metadata)" class="btn btn-sm btn-default">Preview Import</a>
-                <a (click)="importMetadata(false, META)" class="btn btn-sm btn-info">Import</a>
+                <a routerLink="import" class="btn btn-sm btn-info">Import</a>
               </div>
             </div>
             <div class="row">
               <div class="col-md-12">
-                <small *ngIf="loadingMetadata && !metadataHasError">Loading metadata details, please wait...</small>
-                <tabset *ngIf="!loadingMetadata && !metadataHasError">
-                  <tab *ngFor="let item of metadata.items">
-                    <template tabHeading>
-                      {{item | readableName}}
-                    </template>
-                    <div class="row">
-                      <div class="col-md-12" style="padding-top: 10px;">
-                        <app-organisation-units [orgUnits]="metadata.metadata[item]" *ngIf="item == 'organisationUnits'"></app-organisation-units>
-                      </div>
-                    </div>
-                  </tab>
-                </tabset>
+                <router-outlet></router-outlet>
               </div>
             </div>
           </div>

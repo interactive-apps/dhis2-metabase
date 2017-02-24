@@ -4,78 +4,68 @@ import {Observable, BehaviorSubject} from "rxjs"
 import {MetadataPackage} from "../models/metadata-package";
 import {Metadata} from "../models/metadata";
 import {isArray} from "util";
+import {MetadataPackageService} from "./metadata-package.service";
+import {isUndefined} from "util";
 
 @Injectable()
 export class MetadataService {
 
-  public metadatas: Observable<Metadata[]>;
-  private _metadatasPool: BehaviorSubject<Metadata[]>;
-  private dataStore: {
-    metadatas: Metadata[]
-  };
+  public metadataPool: Metadata[];
 
-  constructor(private http: Http) {
-    this.dataStore = {metadatas: []};
-    this._metadatasPool = <BehaviorSubject<Metadata[]>> new BehaviorSubject([]);
-    this.metadatas = this._metadatasPool;
+  constructor(
+    private http: Http,
+    private metadataPackageService: MetadataPackageService
+  ) {
+    this.metadataPool = [];
   }
 
   //Methods
   loadByPackage(metadataPackage: MetadataPackage, packageVersion: number): Observable<any> {
     return Observable.create(observer => {
-      let metadataHref: string = '';
-      metadataPackage.versions.forEach(versionItem => {
-        if(versionItem.version === packageVersion) {
-          metadataHref = versionItem.url;
-        }
-      });
-      this.http.get(metadataHref).map(res => res.json()).subscribe(metadata => {
-        //Check if something exit on metadata for this package id
-        if (this.dataStore.metadatas[metadataPackage.id])  {
-          this.dataStore.metadatas[metadataPackage.id].versions.push(this.compiledMetadata(metadata, packageVersion));
-        } else {
-
-          this.dataStore.metadatas[metadataPackage.id] = {
-            packageId: metadataPackage.id,
-            versions: [this.compiledMetadata(metadata, packageVersion)]
-          };
-        }
-        //persist apps into the pool
-        this._metadatasPool.next(Object.assign({}, this.dataStore).metadatas);
-        observer.next(this.dataStore.metadatas);
-        observer.complete();
-      }, error => {
-        observer.error(false);
-        observer.complete();
-      });
+      let metadataHref = metadataPackage.versions.filter((versionItem) => {return versionItem.version === packageVersion? versionItem.url: null;})[0];
+      if(!isUndefined(metadataHref)) {
+        this.http.get(metadataHref).map(res => res.json()).subscribe(metadata => {
+          //Check if something exit on metadata for this package id
+          let compiledMetadata = this.compiledMetadata(metadata, packageVersion);
+          if (this.metadataPool[metadataPackage.id])  {
+            this.metadataPool[metadataPackage.id].versions.push(compiledMetadata);
+          } else {
+            this.metadataPool[metadataPackage.id] = {
+              packageId: metadataPackage.id,
+              versions: [compiledMetadata]
+            };
+          }
+          observer.next(compiledMetadata);
+          observer.complete();
+        }, error => {
+          observer.error(error);
+        });
+      } else {
+        //@todo handle errors when url not found
+        console.log('cannot find metadata');
+        observer.error('cannot find metadata');
+      }
     });
   }
 
-  findByPackage(metadataPackage: MetadataPackage, packageVersion: number): Observable<any> {
+  findByPackage(metadataPackageId: string, packageVersion: number): Observable<any> {
     return Observable.create(observer => {
-      this.metadatas.subscribe(metadataData => {
-        if(metadataData[metadataPackage.id]) {
-          metadataData[metadataPackage.id].versions.forEach(versionItem => {
-            if(versionItem.version === packageVersion) {
-              observer.next(versionItem);
-              observer.complete();
-            }
-          })
-        } else {
-          //load from source if pool has no data
-          this.loadByPackage(metadataPackage, packageVersion).subscribe(metadata => {
-            metadata[metadataPackage.id].versions.forEach(versionItem => {
-              if(versionItem.version === packageVersion) {
-                observer.next(versionItem);
+      let metadata = this.metadataPool[metadataPackageId] ? this.metadataPool[metadataPackageId].versions.filter((versionItem) => {return versionItem.version === packageVersion? versionItem.metadata: null;})[0] : 'undefined';
+      if(!isUndefined(metadata)) {
+        observer.next(metadata);
+        observer.complete();
+      } else {
+        this.metadataPackageService.find(metadataPackageId)
+          .subscribe(metadataPackage => {
+              //load from source if pool has no data
+              this.loadByPackage(metadataPackage, packageVersion).subscribe(metadata => {
+                observer.next(metadata);
                 observer.complete();
-              }
-            })
-          }, error => {
-            observer.error(error);
-            observer.complete();
-          });
-        }
-      });
+                })
+              }, error => {
+                observer.error(error);
+              });
+      }
     });
   }
 
@@ -85,7 +75,7 @@ export class MetadataService {
     Object.keys(metadata).map(key => {
       if(isArray(metadata[key])) {
         metadataItems.push(key);
-        metadataCount[key] = metadata[key].length
+        metadataCount[key] = metadata[key].length;
       }
     });
     return {

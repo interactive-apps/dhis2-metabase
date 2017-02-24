@@ -15,18 +15,15 @@ export class ViewPackageComponent implements OnInit {
 
   public loadingPackage: boolean;
   public packageHasError: boolean;
-  public loadingMetadata: boolean;
-  public metadataHasError: boolean;
   public metadataPackage: MetadataPackage;
-  public metadata: any;
   META: any;
   constructor(
     private route: ActivatedRoute,
     private metadataPackageService: MetadataPackageService,
     private metadataService: MetadataService
   ) {
-    this.loadingPackage = this.loadingMetadata = true;
-    this.packageHasError = this.metadataHasError = false;
+    this.loadingPackage = true;
+    this.packageHasError = false;
   }
 
   ngOnInit() {
@@ -2005,21 +2002,13 @@ export class ViewPackageComponent implements OnInit {
           }
         }
       ]
-    }
+    };
     this.route.params.subscribe(params => {
       let packageId = params['id'];
       this.metadataPackageService.find(packageId).subscribe(metadataPackage => {
+        console.log(metadataPackage)
         this.metadataPackage = metadataPackage;
         this.loadingPackage = false;
-        //load metadata
-        this.metadataService.findByPackage(metadataPackage, this.metadataPackageService.findLatestVersion(metadataPackage)).subscribe(metadata => {
-          this.metadata = metadata;
-          console.log(metadata)
-          this.loadingMetadata = false;
-        }, error => {
-          this.loadingMetadata = false;
-          this.metadataHasError = true;
-        })
       }, error => {
         this.loadingPackage = false;
         this.packageHasError = true;

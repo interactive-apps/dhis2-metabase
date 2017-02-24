@@ -3,7 +3,7 @@ import {Routes, RouterModule, PreloadAllModules} from '@angular/router';
 
 export const routes: Routes = [
   { path: '', loadChildren: '../app/home/home.module#HomeModule'},
-  {path: 'metadata-package/:id', loadChildren: '../app/metadata-package/metadata-package.module#MetadataPackageModule'}
+  {path: 'metadata-package/:id/:version', loadChildren: '../app/metadata-package/metadata-package.module#MetadataPackageModule'}
 
 ];
 

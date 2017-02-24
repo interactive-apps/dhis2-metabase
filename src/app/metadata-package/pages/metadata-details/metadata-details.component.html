@@ -1,0 +1,13 @@
+<small *ngIf="loadingMetadata && !metadataHasError">Loading metadata details, please wait...</small>
+<tabset *ngIf="!loadingMetadata && !metadataHasError">
+  <tab *ngFor="let item of metadata.items">
+    <template tabHeading>
+      {{item | readableName}}
+    </template>
+    <div class="row">
+      <div class="col-md-12" style="padding-top: 10px;">
+        <app-organisation-units [orgUnits]="metadata.metadata[item]" *ngIf="item == 'organisationUnits'"></app-organisation-units>
+      </div>
+    </div>
+  </tab>
+</tabset>
