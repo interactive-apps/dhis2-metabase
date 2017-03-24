@@ -1,0 +1,15 @@
+<div class="alert alert-info" *ngIf="loading">
+  <small>Loading Metadata details please wait...</small>
+</div>
+<tabset *ngIf="!loading">
+  <tab *ngFor="let item of metadata.items">
+    <template tabHeading>
+      {{item | readableName}}
+    </template>
+    <div class="row">
+      <div class="col-md-12" style="padding-top: 10px;">
+
+      </div>
+    </div>
+  </tab>
+</tabset>

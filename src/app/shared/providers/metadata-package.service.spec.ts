@@ -1,9 +1,8 @@
-/* tslint:disable:no-unused-variable */
+import { TestBed, inject } from '@angular/core/testing';
 
-import { TestBed, async, inject } from '@angular/core/testing';
 import { MetadataPackageService } from './metadata-package.service';
 
-describe('Service: MetadataPackage', () => {
+describe('MetadataPackageService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [MetadataPackageService]

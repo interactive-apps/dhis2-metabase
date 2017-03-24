@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import {HomeRoutingModule} from "./home.routing.module";
+
+import { HomeRoutingModule } from './home-routing.module';
 import {HomeComponent} from "./home.component";
-import { SettingsComponent } from './components/settings/settings.component';
-import { TipsComponent } from './components/tips/tips.component';
+import {FormsModule} from "@angular/forms";
 import {SharedModule} from "../shared/shared.module";
+import { PackageItemComponent } from './components/package-item/package-item.component';
 
 @NgModule({
   imports: [
@@ -14,9 +14,6 @@ import {SharedModule} from "../shared/shared.module";
     HomeRoutingModule,
     SharedModule
   ],
-  declarations: [HomeComponent, SettingsComponent, TipsComponent],
-  exports: [],
-  providers: []
+  declarations: [HomeComponent, PackageItemComponent]
 })
-
-export class HomeModule {}
+export class HomeModule { }

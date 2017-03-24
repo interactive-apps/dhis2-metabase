@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {MetadataPackage} from "../shared/models/metadata-package";
 import {MetadataPackageService} from "../shared/providers/metadata-package.service";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-home',
@@ -9,24 +9,13 @@ import {MetadataPackageService} from "../shared/providers/metadata-package.servi
 })
 export class HomeComponent implements OnInit {
 
-  public metadataPackages: MetadataPackage[];
-  public loading: boolean;
-  public hasError: boolean;
-  constructor(
-    private metadataPackageService:  MetadataPackageService
-  ) {
-    this.loading = true;
-    this.hasError = false;
-  }
+  packages: Observable<Array<any>>;
+  constructor(private packageService: MetadataPackageService) { }
 
   ngOnInit() {
-    this.metadataPackageService.loadAll().subscribe(metadataPackages => {
-      this.metadataPackages = metadataPackages;
-      this.loading = false;
-    }, error => {
-      this.loading = false;
-      this.hasError = true;
-    })
+    this.packages = this.packageService.all();
+    // this.packageService.loadAll();
   }
+
 
 }

@@ -1,5 +1,5 @@
 <section id="home-header">
-  <div class="container">
+  <div class="container-fluid">
     <div class="row">
       <div class="col-md-6">
         <div class="form-group">
@@ -12,34 +12,12 @@
     </div>
   </div>
 </section>
-<div class="container" style="margin-top: 20px;">
-  <div class="row">
-    <div class="col-md-8">
-      <ul class="list-unstyled" *ngIf="!loading && !hasError">
-        <li class="package-block" *ngFor="let metadataPackage of metadataPackages | filter:packageName">
-          <div class="row">
-            <div class="col-md-12">
-              <h4 class="package-name">
-                <b><a routerLink="metadata-package/{{metadataPackage.id}}/{{metadataPackage.versions[0].version}}">{{metadataPackage.name}}</a></b>
-                <!--<span class="notification-box-success"><i class="fa fa-check"></i> imported</span>-->
-              </h4>
-              <span><small><b>Tags: </b></small></span>
-              <span *ngFor="let tag of metadataPackage.tags; let i=index">
-                <small>{{i > 0 ?', ':''}}{{tag}}</small>
-              </span>
-              <p class="text-justify">{{metadataPackage.description}}</p>
-              <ul class="list-inline package-links">
-                <li><a routerLink="metadata-package/{{metadataPackage.id}}" class="btn btn-sm btn-primary">view</a></li>
-                <li><a href="" class="btn btn-sm btn-default"><i class="fa fa-download"></i> import</a></li>
-              </ul>
-              <hr>
-            </div>
-          </div>
-        </li>
-      </ul>
-    </div>
-    <div class="col-md-4">
-      <tips></tips>
+<div class="container-fluid">
+  <div class="row" style="margin-top: 70px;">
+    <!--<span *ngIf="package.loading">{{package.message}}</span>-->
+    <!--<div class="alert alert-danger" *ngIf="package.error">{{package.message}}</div>-->
+    <div class="col-md-12" *ngFor="let packageData of packages | async">
+      <app-package-item [packageItemData]="packageData"></app-package-item>
     </div>
   </div>
 </div>

@@ -1,10 +1,9 @@
-import { NgModule } from '@angular/core';
+import { NgModule }     from '@angular/core';
 import {Routes, RouterModule, PreloadAllModules} from '@angular/router';
 
 export const routes: Routes = [
-  { path: '', loadChildren: '../app/home/home.module#HomeModule'},
-  {path: 'metadata-package/:id/:version', loadChildren: '../app/metadata-package/metadata-package.module#MetadataPackageModule'}
-
+  { path: '', loadChildren: 'app/home/home.module#HomeModule'},
+  {path: 'metadata-package/:version/:id', loadChildren: 'app/metadata-package/metadata-package.module#MetadataPackageModule'}
 ];
 
 @NgModule({

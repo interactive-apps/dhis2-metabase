@@ -1,31 +1,25 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {Dhis2MenuComponent} from "./components/dhis2-menu/dhis2-menu.component";
-import {MetadataPackageService} from "./providers/metadata-package.service";
-import {FilterPipe} from "./pipes/filter.pipe";
-import {MetadataService} from "./providers/metadata.service";
+import { Dhis2MenuComponent } from './components/dhis2-menu/dhis2-menu.component';
+import {Constants} from "./constants";
+import { MenuComponent } from './components/menu/menu.component';
+import { FilterPipe } from './pipes/filter.pipe';
 import { ReadableNamePipe } from './pipes/readable-name.pipe';
-import {MomentModule} from "angular2-moment";
+import {MetadataPackageService} from "./providers/metadata-package.service";
+import {Store} from "./providers/store";
+import { PackageVersionSelectComponent } from './components/package-version-select/package-version-select.component';
+import {FormsModule} from "@angular/forms";
+import { ImportButtonComponent } from './components/import-button/import-button.component';
+import {MetadataImportService} from "./providers/metadata-import.service";
+import {MetadataService} from "./providers/metadata.service";
 
 @NgModule({
   imports: [
     CommonModule,
-    MomentModule
+    FormsModule
   ],
-  declarations: [
-    Dhis2MenuComponent,
-    FilterPipe,
-    ReadableNamePipe
-  ],
-  providers: [
-    MetadataPackageService,
-    MetadataService
-  ],
-  exports: [
-    Dhis2MenuComponent,
-    FilterPipe,
-    ReadableNamePipe,
-    MomentModule
-  ]
+  declarations: [Dhis2MenuComponent, MenuComponent, FilterPipe, ReadableNamePipe, PackageVersionSelectComponent, ImportButtonComponent],
+  providers: [Constants, MetadataPackageService, Store, MetadataImportService, MetadataService],
+  exports: [Dhis2MenuComponent, MenuComponent, FilterPipe, PackageVersionSelectComponent, ImportButtonComponent, ReadableNamePipe]
 })
 export class SharedModule { }

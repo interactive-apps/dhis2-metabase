@@ -1,23 +1,28 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MetadataPackageComponent } from './metadata-package.component';
+
+import { MetadataPackageRoutingModule } from './metadata-package-routing.module';
+import {MetadataPackageComponent} from "./metadata-package.component";
 import { ViewPackageComponent } from './pages/view-package/view-package.component';
-import {MetadataPackageRoutingModule} from "./metadata-package.routing";
-import {TabsModule} from "ng2-bootstrap";
 import {SharedModule} from "../shared/shared.module";
-import { OrganisationUnitsComponent } from './components/organisation-units/organisation-units.component';
-import {OrganisationUnitsService} from "./providers/organisation-units.service";
-import { MetadataDetailsComponent } from './pages/metadata-details/metadata-details.component';
-import { MetadataImportComponent } from './pages/metadata-import/metadata-import.component';
+import { MetadataSummaryComponent } from './components/metadata-summary/metadata-summary.component';
+import { ImportPackageComponent } from './pages/import-package/import-package.component';
+import { MetadataDetailsComponent } from './components/metadata-details/metadata-details.component';
+import {TabsModule} from "ng2-bootstrap";
 
 @NgModule({
   imports: [
     CommonModule,
     MetadataPackageRoutingModule,
-    TabsModule.forRoot(),
-    SharedModule
+    SharedModule,
+    TabsModule.forRoot()
   ],
-  declarations: [MetadataPackageComponent, ViewPackageComponent, OrganisationUnitsComponent, MetadataDetailsComponent, MetadataImportComponent],
-  providers: [OrganisationUnitsService]
+  declarations: [
+    MetadataPackageComponent,
+    ViewPackageComponent,
+    MetadataSummaryComponent,
+    ImportPackageComponent,
+    MetadataDetailsComponent
+  ]
 })
 export class MetadataPackageModule { }

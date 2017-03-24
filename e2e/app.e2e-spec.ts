@@ -1,10 +1,10 @@
-import { Ng2SeedPage } from './app.po';
+import { Metabase2Page } from './app.po';
 
-describe('ng2-seed App', function() {
-  let page: Ng2SeedPage;
+describe('metabase2 App', () => {
+  let page: Metabase2Page;
 
   beforeEach(() => {
-    page = new Ng2SeedPage();
+    page = new Metabase2Page();
   });
 
   it('should display message saying app works', () => {

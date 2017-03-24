@@ -1,75 +1,55 @@
 import { Injectable } from '@angular/core';
-import {Http} from '@angular/http';
-import {Observable, BehaviorSubject} from "rxjs"
-import {MetadataPackage} from "../models/metadata-package";
-import {isUndefined} from "util";
+import {BehaviorSubject, Observable, Subscription} from "rxjs";
+import {Constants} from "../constants";
+import {Http} from "@angular/http";
+import {Store} from "./store";
 
 @Injectable()
 export class MetadataPackageService {
 
-  public metadataPackagePool: MetadataPackage[];
-  private baseUrl: string;
-
-  constructor(private http: Http) {
-    //@todo this repo is hardcoded, future suppport for mutliple repositories
-    this.baseUrl = 'https://raw.githubusercontent.com/dhis2/dhis2-metadata-repo/master/repo/26/index.json';
-    this.metadataPackagePool = [];
+  private _packages: BehaviorSubject<Array<any>>;
+  private _packagePool: Array<any>;
+  subscription: Subscription;
+  private _url:string;
+  constructor(
+    private constants: Constants,
+    private http: Http,
+    private store: Store
+  ) {
+    this._packagePool = [];
+    this._url = 'https://raw.githubusercontent.com/hisptz/dhis2-metadata-repo/master/packages.json';
+    this._packages = <BehaviorSubject<Array<any>>>new BehaviorSubject([{loading: true, message: 'Moving packages into position....'}]);
   }
 
-  //Methods
-  loadAll(): Observable<any> {
-    return Observable.create(observer => {
-      //load data from the pool first
-      if(this.metadataPackagePool.length > 0) {
-        observer.next(this.metadataPackagePool);
-        observer.complete();
-      } else {
-        //load data from the source if pool is empty
-        this.http.get(this.baseUrl).map(res => res.json()).subscribe(response => {
-          this.metadataPackagePool.push(response.packages);
-          observer.next(response.packages);
-          observer.complete();
-        }, error => {observer.error(error)})
-      }
-    });
+  public all(): Observable<any> {
+    // return this._packages.asObservable();
+    return this.store.select('packages', this._url, 'packages');
   }
 
-  find(id: string): Observable<MetadataPackage> {
-    return Observable.create(observer => {
-      let metadataPackage = this.metadataPackagePool.filter((poolItem) => {return poolItem.id === id? poolItem : null;})[0];
-      if(!isUndefined(metadataPackage)) {
-        observer.next(metadataPackage);
-        observer.complete();
-      } else {
-        this.loadAll().subscribe(metadataPackages => {
-          let metadataPackage = metadataPackages.filter((packageItem) => {return packageItem.id === id? packageItem : null;})[0]
-          if(!isUndefined(metadataPackage)) {
-            observer.next(metadataPackage);
-            observer.complete();
-          } else {
-            observer.error('MetadataPackage with id "'+ id + '" could not be found or may have been deleted');
-          }
+  public find(id: any): Observable<any> {
+    return this.store.selectById('packages',id, this._url,'packages','array');
+  }
+
+  public loadAll(): void {
+    if(this._packagePool.length > 0) {
+      this._packages.next(this._packagePool);
+    } else {
+      this.http.get(this._url).map(res => {
+        let packages: any = res.json().packages;
+        packages.forEach(packageData => {
+          // packageData.latestVersion = this.findLatestVersion(packageData);
+        });
+        return packages;
+      })
+        .catch(this.constants.handleError)
+        .subscribe(packages => {
+          this._packagePool = packages;
+          this._packages.next(packages)
         }, error => {
-          observer.error('MetadataPackage with id "'+ id + '" could not be found or may have been deleted');
+          this._packages.next([{error: true, message: 'error has occured'}]);
+          this.subscription.unsubscribe();
         })
-      }
-    });
-  }
-
-  findLatestVersion(metadataPackageId: string): Observable<number> {
-    return Observable.create(observer => {
-      let versionArray = [];
-      this.find(metadataPackageId).subscribe(
-        metadataPackage => {
-          metadataPackage.versions.forEach(version => {
-            versionArray.push(version.version);
-          });
-          versionArray = versionArray.sort((a, b) => a - b);
-          observer.next(versionArray[0]);
-          observer.complete();
-        },
-        error => {observer.error(error)});
-    })
+    }
   }
 
 }
