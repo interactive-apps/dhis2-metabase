@@ -10,16 +10,16 @@ export class MetadataDetailsComponent implements OnInit {
 
   @Input() metadataId: string;
   @Input() metadataUrl: string;
-  metadata: any;
+  metadata: Array<any> = [];
   loading: boolean = true;
   constructor(
     private metadataService: MetadataService
   ) { }
 
   ngOnInit() {
-    this.metadataService.find(this.metadataId,this.metadataUrl).subscribe(meta => {
+    this.metadataService.find(this.metadataId,this.metadataUrl).subscribe(metadata => {
       this.loading = false;
-      this.metadata = this.metadataService.compileMetadata(meta);
+      this.metadata = this.metadataService.compileMetadata(metadata);
     })
   }
 

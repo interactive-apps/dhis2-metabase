@@ -100,7 +100,33 @@ export class MetadataService {
     return url;
   }
 
-  checkIfExist(item: string,id: string): Observable<boolean> {
+  private checkFromMetadata(item: string, metadataId: string, id: string): Observable<boolean> {
+    let found: boolean = false;
+    return Observable.create(observer => {
+      this.store.selectById('metadata', metadataId, null).subscribe(metadata => {
+        if(metadata.hasOwnProperty(item)) {
+          for(let itemData of metadata[item]) {
+            if(itemData.id == id) {
+              found = true;
+              observer.next(true);
+              observer.complete();
+              break;
+            }
+          }
+        }
+
+        /**
+         * return false if not found
+         */
+        if(!found) {
+          observer.next(false);
+          observer.complete();
+        }
+      });
+    })
+  }
+
+  private checkFromSystem(item: string, id: string) {
     return Observable.create(observer => {
       this.http.get(this.api + item + '/' + id + '.json')
         .map((res: Response) => res.json())
@@ -112,6 +138,53 @@ export class MetadataService {
           observer.next(false);
           observer.complete();
         })
+    })
+  }
+
+  checkIfImported() {
+
+  }
+
+  checkIfExist(item: string,id: string, parentId: string = null, preferSource: boolean = false): Observable<any> {
+    return Observable.create(observer => {
+
+      if(!preferSource) {
+        /**
+         * Find from its metadata package
+         */
+        this.checkFromMetadata(item,parentId,id).subscribe(metadataResult  => {
+          if(metadataResult) {
+            observer.next({found: true, message: item.slice(0,-1) + ' is available in the package'});
+            observer.complete();
+          } else {
+            /**
+             * Find from the system
+             */
+            this.checkFromSystem(item,id).subscribe(systemResult => {
+              if(systemResult) {
+                observer.next({found: true, message: item.slice(0,-1) + ' is available in the system'});
+                observer.complete();
+              } else {
+                observer.next({found: false, message: item.slice(0,-1) + ' not found'});
+                observer.complete();
+              }
+            })
+          }
+        })
+      } else {
+        /**
+         * Find from the system
+         */
+        this.checkFromSystem(item,id).subscribe(systemResult => {
+          if(systemResult) {
+            observer.next({found: true, message: item.slice(0,-1) + ' is available in the system'});
+            observer.complete();
+          } else {
+            observer.next({found: false, message: item.slice(0,-1) + ' not found'});
+            observer.complete();
+          }
+        })
+      }
     })
   }
 

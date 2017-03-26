@@ -14,8 +14,4 @@ export class PackageItemComponent implements OnInit {
   ngOnInit() {
   }
 
-  getSelectedVersion(version) {
-    this.selectedVersion = version;
-  }
-
 }

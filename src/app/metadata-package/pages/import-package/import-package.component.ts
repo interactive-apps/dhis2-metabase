@@ -10,7 +10,12 @@ import {MetadataPackageService} from "../../../shared/providers/metadata-package
 })
 export class ImportPackageComponent implements OnInit {
 
-  progress: Array<any> = [];
+  progress: string = 'Loading Metadata Package';
+  importSummary: any;
+  summaryTitle: string;
+  importCompleted: boolean = false;
+  totalItems: number = 5;
+  loadedItems: number = 0;
   constructor(
     private metadataService: MetadataService,
     private metadataPackageService: MetadataPackageService,
@@ -18,21 +23,38 @@ export class ImportPackageComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.progress.push({message: 'Loading Metadata files'});
     this.route.parent.params.subscribe(params => {
       this.metadataPackageService.find(params['id']).subscribe(metadataPackage => {
+        this.progress = 'Metadata package loaded';
+        this.loadedItems++;
         let metadataId: string = params['id'] + '_' + params['version'];
+        let queryParams = this.route.snapshot.queryParams;
+        let preview = queryParams.hasOwnProperty('preview') ? true : false;
+        this.progress = 'Fetching metadata array';
+        this.loadedItems++;
         this.metadataService.find(metadataId,this.metadataService.getMetadataUrl(metadataPackage.versions,params['version'])).subscribe(metadata => {
-          this.progress.push({message: 'Importing metadata'});
-          this.metadataService.importMetadata(false,metadata).subscribe(result => {
-            this.progress.push({message: 'Metadata Imported'});
-            console.log(result)
+          this.progress = 'Metadata fetched';
+          this.loadedItems++;
+          this.progress = preview ? 'Previewing metadata' : 'Importing metadata';
+          this.loadedItems++;
+          this.metadataService.importMetadata(preview,metadata).subscribe(result => {
+            this.progress = preview ? 'Metadata preview completed': 'Metadata Import completed';
+            this.loadedItems++;
+            //this.totalItems = 0;
+            this.importCompleted = true;
+            this.summaryTitle = preview ? 'Preview summary' : 'Import summary';
+            this.importSummary = result;
+            console.log(this.importSummary)
           })
 
         })
 
       })
     })
+  }
+
+  calculateProgress(loaded,total) {
+    return total == 0 ? 0 :((loaded/total)*100).toFixed(0)
   }
 
 }

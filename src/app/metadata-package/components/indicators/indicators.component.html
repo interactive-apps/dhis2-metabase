@@ -1,0 +1,24 @@
+<table class="table table-bordered table-condensed table-hover">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Name</th>
+      <th>Status</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let indicator of indicatorData; let i=index">
+      <td>{{i + 1}}</td>
+      <td>{{indicator.name}}</td>
+      <td>
+        <ol>
+          <li *ngFor="let stat of indicator.status">
+            <span class="text-{{stat.type}}">{{stat.message}}</span>
+          </li>
+        </ol>
+      </td>
+      <td>action</td>
+    </tr>
+  </tbody>
+</table>

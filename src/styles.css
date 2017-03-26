@@ -92,10 +92,10 @@ select
 
 .panel-default,
 .btn-default {
-  border-color: #f5f5f5 !important;
+  /*border-color: #f5f5f5 !important;*/
 }
 
 .btn-default:hover {
-  background-color: #f5f5f5 !important;
+  /*background-color: #f5f5f5 !important;*/
 }
 

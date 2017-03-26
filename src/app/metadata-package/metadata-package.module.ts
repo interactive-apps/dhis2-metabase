@@ -9,6 +9,7 @@ import { MetadataSummaryComponent } from './components/metadata-summary/metadata
 import { ImportPackageComponent } from './pages/import-package/import-package.component';
 import { MetadataDetailsComponent } from './components/metadata-details/metadata-details.component';
 import {TabsModule} from "ng2-bootstrap";
+import { IndicatorsComponent } from './components/indicators/indicators.component';
 
 @NgModule({
   imports: [
@@ -22,7 +23,8 @@ import {TabsModule} from "ng2-bootstrap";
     ViewPackageComponent,
     MetadataSummaryComponent,
     ImportPackageComponent,
-    MetadataDetailsComponent
+    MetadataDetailsComponent,
+    IndicatorsComponent
   ]
 })
 export class MetadataPackageModule { }

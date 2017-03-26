@@ -8,7 +8,7 @@
     </template>
     <div class="row">
       <div class="col-md-12" style="padding-top: 10px;">
-
+        <app-indicators *ngIf="item == 'indicators'" [indicators]="metadata.metadata[item]" [metadataId]="metadataId"></app-indicators>
       </div>
     </div>
   </tab>

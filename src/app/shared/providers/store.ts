@@ -6,6 +6,7 @@ export class Store {
   private dataStore: any = {
     packages: [],
     metadata: [],
+    indicators: []
   };
 
   constructor(private http: Http) {
