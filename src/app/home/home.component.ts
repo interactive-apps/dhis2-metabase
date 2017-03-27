@@ -9,11 +9,16 @@ import {Observable} from "rxjs";
 })
 export class HomeComponent implements OnInit {
 
-  packages: Observable<Array<any>>;
+  loading: boolean = true;
+  packages: Array<any>;
   constructor(private packageService: MetadataPackageService) { }
 
   ngOnInit() {
-    this.packages = this.packageService.all();
+    this.packageService.all()
+      .subscribe(packages => {
+        this.packages = packages;
+        this.loading = false;
+      });
     // this.packageService.loadAll();
   }
 
