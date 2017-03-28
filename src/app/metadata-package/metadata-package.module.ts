@@ -10,6 +10,9 @@ import { ImportPackageComponent } from './pages/import-package/import-package.co
 import { MetadataDetailsComponent } from './components/metadata-details/metadata-details.component';
 import {TabsModule} from "ng2-bootstrap";
 import { IndicatorsComponent } from './components/indicators/indicators.component';
+import { IndicatorTypeComponent } from './components/indicator-type/indicator-type.component';
+import { OrgUnitComponent } from './components/org-unit/org-unit.component';
+import { DataElementComponent } from './components/data-element/data-element.component';
 
 @NgModule({
   imports: [
@@ -24,7 +27,10 @@ import { IndicatorsComponent } from './components/indicators/indicators.componen
     MetadataSummaryComponent,
     ImportPackageComponent,
     MetadataDetailsComponent,
-    IndicatorsComponent
+    IndicatorsComponent,
+    IndicatorTypeComponent,
+    OrgUnitComponent,
+    DataElementComponent
   ]
 })
 export class MetadataPackageModule { }

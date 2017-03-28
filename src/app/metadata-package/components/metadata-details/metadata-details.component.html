@@ -9,6 +9,9 @@
     <div class="row">
       <div class="col-md-12" style="padding-top: 10px;">
         <app-indicators *ngIf="item == 'indicators'" [indicators]="metadata.metadata[item]" [metadataId]="metadataId"></app-indicators>
+        <app-indicator-type *ngIf="item == 'indicatorTypes'" [indicatorTypes]="metadata.metadata[item]"></app-indicator-type>
+        <app-org-unit *ngIf="item == 'organisationUnits'" [orgUnits]="metadata.metadata[item]"></app-org-unit>
+        <app-data-element *ngIf="item == 'dataElements'" [dataElements]="metadata.metadata[item]"></app-data-element>
       </div>
     </div>
   </tab>
