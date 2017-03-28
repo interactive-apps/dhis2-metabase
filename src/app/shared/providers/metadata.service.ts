@@ -145,7 +145,7 @@ export class MetadataService {
 
   }
 
-  checkIfExist(item: string,id: string, parentId: string = null, preferSource: boolean = false): Observable<any> {
+  checkIfExist(item: string,id: string, name: string, parentId: string = null, preferSource: boolean = false): Observable<any> {
     return Observable.create(observer => {
 
       if(!preferSource) {
@@ -154,7 +154,7 @@ export class MetadataService {
          */
         this.checkFromMetadata(item,parentId,id).subscribe(metadataResult  => {
           if(metadataResult) {
-            observer.next({found: true, message: item.slice(0,-1) + ' is available in the package'});
+            observer.next({found: true, message: item.slice(0,-1) + ' with name ' + name + ' is available in the package'});
             observer.complete();
           } else {
             /**
@@ -162,10 +162,10 @@ export class MetadataService {
              */
             this.checkFromSystem(item,id).subscribe(systemResult => {
               if(systemResult) {
-                observer.next({found: true, message: item.slice(0,-1) + ' is available in the system'});
+                observer.next({found: true, message: item.slice(0,-1) + ' with name ' + name + ' is available in the system'});
                 observer.complete();
               } else {
-                observer.next({found: false, message: item.slice(0,-1) + ' not found'});
+                observer.next({found: false, message: item.slice(0,-1) + 'with name ' + name + ' could not be found in the system'});
                 observer.complete();
               }
             })
@@ -177,10 +177,10 @@ export class MetadataService {
          */
         this.checkFromSystem(item,id).subscribe(systemResult => {
           if(systemResult) {
-            observer.next({found: true, message: item.slice(0,-1) + ' is available in the system'});
+            observer.next({found: true, message: item.slice(0,-1) + ' with name ' + name + ' is available in the system'});
             observer.complete();
           } else {
-            observer.next({found: false, message: item.slice(0,-1) + ' not found'});
+            observer.next({found: false, message: item.slice(0,-1) + ' with name ' + name + ' could not be found in the system'});
             observer.complete();
           }
         })

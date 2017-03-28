@@ -1,6 +1,6 @@
 {
     "version": "2.0",
-    "name": "Metadata Repository",
+    "name": "Metabase",
     "description": "Metadata Repository",
     "launch_path": "index.html",
     "icons": {

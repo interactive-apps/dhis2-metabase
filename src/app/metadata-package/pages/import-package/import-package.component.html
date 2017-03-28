@@ -56,7 +56,10 @@
       <div class="panel panel-default">
         <div class="panel-body">
           <h4 class="page-header" style="margin-top: 2px;">Import conflicts</h4>
-          <table class="table table-bordered table-hover">
+          <div class="alert alert-success" *ngIf="importSummary.importConflicts.length == 0">
+            <h4>All items have been imported successfully!</h4>
+          </div>
+          <table class="table table-bordered table-hover" *ngIf="importSummary.importConflicts.length > 0">
             <thead>
               <tr>
                 <th>#</th>
@@ -65,7 +68,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let conflict of importSummary.importConflicts; let i=index">
+              <tr *ngFor="let conflict of importSummary.importConflicts | paginate: { itemsPerPage: 10, currentPage: p }; let i=index">
                 <td>{{i + 1}}</td>
                 <td>{{conflict.type}}</td>
                 <td>
@@ -76,6 +79,7 @@
               </tr>
             </tbody>
           </table>
+          <pagination-controls (pageChange)="p = $event"></pagination-controls>
         </div>
       </div>
     </div>

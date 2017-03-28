@@ -12,14 +12,18 @@ import {FormsModule} from "@angular/forms";
 import { ImportButtonComponent } from './components/import-button/import-button.component';
 import {MetadataImportService} from "./providers/metadata-import.service";
 import {MetadataService} from "./providers/metadata.service";
+import {MomentModule} from "angular2-moment";
+import {Ng2PaginationModule} from "ng2-pagination";
 
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    MomentModule,
+    Ng2PaginationModule
   ],
   declarations: [Dhis2MenuComponent, MenuComponent, FilterPipe, ReadableNamePipe, PackageVersionSelectComponent, ImportButtonComponent],
   providers: [Constants, MetadataPackageService, Store, MetadataImportService, MetadataService],
-  exports: [Dhis2MenuComponent, MenuComponent, FilterPipe, PackageVersionSelectComponent, ImportButtonComponent, ReadableNamePipe]
+  exports: [Ng2PaginationModule,MomentModule, Dhis2MenuComponent, MenuComponent, FilterPipe, PackageVersionSelectComponent, ImportButtonComponent, ReadableNamePipe]
 })
 export class SharedModule { }

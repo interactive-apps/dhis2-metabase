@@ -12,6 +12,9 @@ export class IndicatorsComponent implements OnInit {
   @Input() indicators: any;
   @Input() metadataId: any;
   indicatorData: Array<any> = [];
+  currentIndicator: string = null;
+  isFixBlockOpen: boolean = false;
+  fixBlockItem: string;
   constructor(
     private metadataService: MetadataService
   ) { }
@@ -27,7 +30,7 @@ export class IndicatorsComponent implements OnInit {
       let numeratorResultCount: number = 0;
       if(numeratorParameters.dataElements.length > 0) {
         numeratorParameters.dataElements.forEach(dataElement => {
-          this.metadataService.checkIfExist('dataElements',dataElement,null,true)
+          this.metadataService.checkIfExist('dataElements',dataElement,null,null,true)
             .subscribe(numeratorResult => {
               numeratorResultCount++;
               if(numeratorResult.found) {
@@ -36,9 +39,9 @@ export class IndicatorsComponent implements OnInit {
 
               if(numeratorResultCount == numeratorParameters.dataElements.length) {
                 if(numeratorDataElementCount == 0) {
-                  indicator.status.push({type: 'danger', message: 'No data element found for numerator'});
+                  indicator.status.push({type: 'danger',item: 'numerator', message: 'No data element was found for numerator'});
                 } else {
-                  indicator.status.push({type: 'info', message: numeratorDataElementCount + ' of ' + numeratorParameters.dataElements.length + ' data elements found for numerator'});
+                  indicator.status.push({type: 'success',item: 'numerator', message: numeratorDataElementCount + ' of ' + numeratorParameters.dataElements.length + ' data elements found for numerator'});
                 }
               }
             })
@@ -53,8 +56,8 @@ export class IndicatorsComponent implements OnInit {
       let denominatorResultCount: number = 0;
       if(denominatorParameters.dataElements.length > 0) {
         // console.log(indicator.denominator)
-        denominatorParameters.dataElements.forEach(dataElement => {
-          this.metadataService.checkIfExist('dataElements',dataElement,null,true)
+        denominatorParameters.dataElements.forEach(dataElementId => {
+          this.metadataService.checkIfExist('dataElements',dataElementId,null,null,true)
             .subscribe(denominatorResult => {
               denominatorResultCount++;
               if(denominatorResult.found) {
@@ -63,9 +66,9 @@ export class IndicatorsComponent implements OnInit {
 
               if(denominatorResultCount == denominatorParameters.dataElements.length) {
                 if(denominatorDataElementCount == 0) {
-                  indicator.status.push({type: 'danger', message: 'No data element found for denominator'});
+                  indicator.status.push({type: 'danger',item: 'denominator', message: 'No data element was found for denominator'});
                 } else {
-                  indicator.status.push({type: 'info', message: denominatorDataElementCount + ' of ' + denominatorParameters.dataElements.length + ' data elements found for denominator'});
+                  indicator.status.push({type: 'success',item: 'denominator', message: denominatorDataElementCount + ' of ' + denominatorParameters.dataElements.length + ' data elements found for denominator'});
                 }
               }
             })
@@ -88,13 +91,13 @@ export class IndicatorsComponent implements OnInit {
 
   checkDependency(item, dependency, metadataId, preferSource = false) {
     return Observable.create(observer => {
-      this.metadataService.checkIfExist(dependency + 's',item[dependency].id, metadataId,preferSource)
+      this.metadataService.checkIfExist(dependency + 's',item[dependency].id,item[dependency].name, metadataId,preferSource)
         .subscribe(searchResult => {
           if(searchResult.found) {
-            observer.next({type: 'success', message: searchResult.message});
+            observer.next({type: 'success',item: dependency, message: searchResult.message});
             observer.complete();
           } else {
-            observer.next({type: 'danger', message: searchResult.message});
+            observer.next({type: 'danger',item: dependency, message: searchResult.message});
             observer.complete();
           }
 
@@ -130,6 +133,20 @@ export class IndicatorsComponent implements OnInit {
 
     });
     return result;
+  }
+
+  view(indicator) {
+    this.currentIndicator = indicator;
+    console.log(indicator)
+  }
+
+  close() {
+    this.currentIndicator = null;
+  }
+
+  openFixBlock(item) {
+    this.isFixBlockOpen = true;
+    this.fixBlockItem = item;
   }
 
 }
