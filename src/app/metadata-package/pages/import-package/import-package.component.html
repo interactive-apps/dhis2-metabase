@@ -8,7 +8,7 @@
     <div class="row" *ngIf="totalItems > 0">
       <div class="col-md-12">
         <div class="progress" style="height: 7px;">
-          <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar"
+          <div class="progress-bar progress-bar-success progress-bar-striped {{loadedItems < totalItems ? 'active' : ''}}" role="progressbar"
   [attr.aria-valuenow]="calculateProgress(loadedItems,totalItems)" aria-valuemin="0" aria-valuemax="100" [ngStyle]="{'width' : calculateProgress(loadedItems,totalItems) + '%'}">
           </div>
         </div>

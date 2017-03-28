@@ -1,5 +1,6 @@
 import {Component, OnInit, Input} from '@angular/core';
 import {MetadataService} from "../../../shared/providers/metadata.service";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-metadata-details',
@@ -13,13 +14,17 @@ export class MetadataDetailsComponent implements OnInit {
   metadata: Array<any> = [];
   loading: boolean = true;
   constructor(
-    private metadataService: MetadataService
+    private metadataService: MetadataService,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit() {
-    this.metadataService.find(this.metadataId,this.metadataUrl).subscribe(metadata => {
-      this.loading = false;
-      this.metadata = this.metadataService.compileMetadata(metadata);
+    this.route.params.subscribe(params => {
+      this.loading = true;
+      this.metadataService.find(this.metadataId,this.metadataUrl).subscribe(metadata => {
+        this.loading = false;
+        this.metadata = this.metadataService.compileMetadata(metadata);
+      })
     })
   }
 
