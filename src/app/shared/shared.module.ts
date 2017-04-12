@@ -14,16 +14,19 @@ import {MetadataImportService} from "./providers/metadata-import.service";
 import {MetadataService} from "./providers/metadata.service";
 import {MomentModule} from "angular2-moment";
 import {Ng2PaginationModule} from "ng2-pagination";
+import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
+import {RouterModule} from "@angular/router";
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
+    RouterModule,
     MomentModule,
     Ng2PaginationModule
   ],
-  declarations: [Dhis2MenuComponent, MenuComponent, FilterPipe, ReadableNamePipe, PackageVersionSelectComponent, ImportButtonComponent],
+  declarations: [Dhis2MenuComponent, MenuComponent, FilterPipe, ReadableNamePipe, PackageVersionSelectComponent, ImportButtonComponent, BreadcrumbComponent],
   providers: [Constants, MetadataPackageService, Store, MetadataImportService, MetadataService],
-  exports: [Ng2PaginationModule,MomentModule, Dhis2MenuComponent, MenuComponent, FilterPipe, PackageVersionSelectComponent, ImportButtonComponent, ReadableNamePipe]
+  exports: [Ng2PaginationModule,MomentModule, Dhis2MenuComponent, MenuComponent, FilterPipe, PackageVersionSelectComponent, ImportButtonComponent, ReadableNamePipe, BreadcrumbComponent]
 })
 export class SharedModule { }

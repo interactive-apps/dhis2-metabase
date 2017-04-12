@@ -16,6 +16,8 @@ export class ImportPackageComponent implements OnInit {
   importCompleted: boolean = false;
   totalItems: number = 5;
   loadedItems: number = 0;
+  isPreview: boolean;
+  routeDetails: any[] = [];
   constructor(
     private metadataService: MetadataService,
     private metadataPackageService: MetadataPackageService,
@@ -30,8 +32,20 @@ export class ImportPackageComponent implements OnInit {
         let metadataId: string = params['id'] + '_' + params['version'];
         let queryParams = this.route.snapshot.queryParams;
         let preview = queryParams.hasOwnProperty('preview') ? true : false;
+        this.isPreview = preview;
         this.progress = 'Fetching metadata array';
         this.loadedItems++;
+        this.routeDetails = [
+          {
+            name: metadataPackage.name,
+            url: '/metadata-package/' + params['version'] + '/' + params['id'] ,
+            active: false
+          },
+          {
+            name: preview ? 'Preview' : 'Import',
+            active: true
+          }
+        ]
         this.metadataService.find(metadataId,this.metadataService.getMetadataUrl(metadataPackage.versions,params['version'])).subscribe(metadata => {
           this.progress = 'Metadata fetched';
           this.loadedItems++;
@@ -44,7 +58,7 @@ export class ImportPackageComponent implements OnInit {
             this.importCompleted = true;
             this.summaryTitle = preview ? 'Preview summary' : 'Import summary';
             this.importSummary = result;
-            console.log(this.importSummary)
+            this.totalItems = 0;
           })
 
         })

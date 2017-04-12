@@ -13,6 +13,7 @@ export class ViewPackageComponent implements OnInit{
   metadataPackage: any = {};
   loading: boolean = true;
   selectedVersion: number;
+  routeDetails: any[] = [];
   constructor(
     private route: ActivatedRoute,
     private metadataPackageService: MetadataPackageService
@@ -24,6 +25,14 @@ export class ViewPackageComponent implements OnInit{
       this.metadataPackageService.find(params['id']).subscribe(metadataPackage => {
         this.loading = false;
         this.metadataPackage = metadataPackage;
+
+        this.routeDetails = [
+          {
+            name: this.metadataPackage.name,
+            url: this.route.snapshot,
+            active: true
+          }
+        ]
       });
     })
   }
